@@ -5,21 +5,21 @@ import * as path from "path";
 import * as semver from "semver";
 
 /**
- * @returns {string} the Rust target specifier for the current platform.
+ * @returns {string[]} possible Rust target specifiers for the current platform.
  */
-export function getTarget(): string {
+function getTargets(): string[] {
   const { arch, platform } = process;
   if (arch == "x64") {
     if (platform == "linux") {
-      return "x86_64-unknown-linux-musl";
+      return ["x86_64-unknown-linux-musl", "x86_64-unknown-linux-gnu"];
     } else if (platform == "darwin") {
-      return "x86_64-apple-darwin";
+      return ["x86_64-apple-darwin"];
     } else if (platform == "win32") {
-      return "x86_64-pc-windows-msvc";
+      return ["x86_64-pc-windows-msvc"];
     }
   }
   throw new Error(
-    `failed to determine current target; arch = ${arch}, platform = ${platform}`
+    `failed to determine any valid targets; arch = ${arch}, platform = ${platform}`
   );
 }
 
@@ -63,12 +63,11 @@ interface Release {
  * Fetch the latest matching release for the given tool.
  *
  * @param tool the tool to fetch a release for.
- * @param target the Rust target specifier that should be included in the GitHub
- * release asset.
  *
  * @returns {Promise<Release>} a single GitHub release.
  */
-async function getRelease(tool: Tool, target: string): Promise<Release> {
+async function getRelease(tool: Tool): Promise<Release> {
+  const targets = getTargets();
   const { owner, name, versionSpec } = tool;
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
   return octokit
@@ -78,7 +77,9 @@ async function getRelease(tool: Tool, target: string): Promise<Release> {
       (response, done) => {
         const releases = response.data
           .map((rel) => {
-            const asset = rel.assets.find((ass) => ass.name.includes(target));
+            const asset = rel.assets.find((ass) =>
+              targets.some((target) => ass.name.includes(target))
+            );
             if (asset) {
               return {
                 version: rel.tag_name.replace(/^v/, ""),
@@ -113,15 +114,10 @@ async function getRelease(tool: Tool, target: string): Promise<Release> {
  * GitHub releases.
  *
  * @param tool the tool to check or install.
- * @param target the Rust target specifier that should be included in the GitHub
- * release asset.
  *
  * @returns the directory containing the tool binary.
  */
-export async function checkOrInstallTool(
-  tool: Tool,
-  target: string
-): Promise<InstalledTool> {
+export async function checkOrInstallTool(tool: Tool): Promise<InstalledTool> {
   const { name, versionSpec } = tool;
 
   // first check if we have previously downloaded the tool
@@ -129,7 +125,7 @@ export async function checkOrInstallTool(
 
   if (!dir) {
     // find the latest release by querying GitHub API
-    const { version, downloadUrl } = await getRelease(tool, target);
+    const { version, downloadUrl } = await getRelease(tool);
 
     // download, extract, and cache the tool
     const artifact = await tc.downloadTool(downloadUrl);

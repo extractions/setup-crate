@@ -97,7 +97,7 @@ async function getRelease(tool: Tool): Promise<Release> {
               ? semver.satisfies(rel.version, versionSpec)
               : true
           );
-        if (releases && done) {
+        if (releases) {
           done();
         }
         return releases;

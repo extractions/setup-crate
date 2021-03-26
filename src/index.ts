@@ -1,6 +1,7 @@
 import * as core from "@actions/core";
 import * as tc from "@actions/tool-cache";
 import { Octokit } from "@octokit/rest";
+import { promises as fs, constants as fs_constants } from "fs";
 import * as path from "path";
 import * as semver from "semver";
 
@@ -29,10 +30,12 @@ function getTargets(): string[] {
 export interface Tool {
   /** The GitHub owner (username or organization). */
   owner: string;
-  /** The name of the tool and the GitHub repo name. */
+  /** The GitHub repo name. */
   name: string;
   /** A valid semantic version specifier for the tool. */
   versionSpec?: string;
+  /** The name of the tool binary (defaults to the repo name) */
+  bin?: string;
 }
 
 /**
@@ -41,12 +44,14 @@ export interface Tool {
 export interface InstalledTool {
   /** The GitHub owner (username or organization). */
   owner: string;
-  /** The name of the tool and the GitHub repo name. */
+  /** The GitHub repo name. */
   name: string;
   /** The version of the tool. */
   version: string;
   /** The directory containing the tool binary. */
   dir: string;
+  /** The name of the tool binary (defaults to the repo name) */
+  bin?: string;
 }
 
 /**
@@ -109,6 +114,31 @@ async function getRelease(tool: Tool): Promise<Release> {
     });
 }
 
+async function handleBadBinaryPermissions(
+  tool: Tool,
+  dir: string
+): Promise<void> {
+  const { name, bin } = tool;
+  if (process.platform !== "win32") {
+    const findBin = async () => {
+      const files = await fs.readdir(dir);
+      for await (const file of files) {
+        if (file.toLowerCase() == name.toLowerCase()) {
+          return file;
+        }
+      }
+      return name;
+    };
+    const binary = path.join(dir, bin ? bin : await findBin());
+    try {
+      await fs.access(binary, fs_constants.X_OK);
+    } catch {
+      await fs.chmod(binary, "755");
+      core.debug(`Fixed file permissions (-> 0o755) for ${binary}`);
+    }
+  }
+}
+
 /**
  * Checks the tool cache for the tool, and if it is missing fetches it from
  * GitHub releases.
@@ -141,6 +171,9 @@ export async function checkOrInstallTool(tool: Tool): Promise<InstalledTool> {
 
     dir = await tc.cacheDir(extractDir, name, version);
   }
+
+  // Handle bad binary permissions, the binary needs to be executable!
+  await handleBadBinaryPermissions(tool, dir);
 
   // FIXME: is there a better way to get the version?
   const version = path.basename(path.dirname(dir));

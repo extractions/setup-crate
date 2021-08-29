@@ -1,0 +1,43 @@
+{
+  "name": "@extractions/setup-crate",
+  "version": "0.2.1",
+  "description": "Install a Rust crate.",
+  "author": "Ross MacArthur <ross@macarthur.io>",
+  "license": "MIT OR Apache-2.0",
+  "homepage": "https://github.com/extractions/setup-crate#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/extractions/setup-crate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/extractions/setup-crate/issues"
+  },
+  "scripts": {
+    "build": "tsc",
+    "fmt": "node node_modules/.bin/prettier --write src/**/*.ts",
+    "lint": "node node_modules/.bin/eslint src/**/*.ts"
+  },
+  "files": [
+    "lib/**/*"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/tool-cache": "^1.6.1",
+    "@octokit/rest": "^18.2.0",
+    "semver": "^7.3.4"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.31",
+    "@types/semver": "^7.3.4",
+    "@typescript-eslint/eslint-plugin": "^4.15.1",
+    "@typescript-eslint/parser": "^4.15.1",
+    "eslint": "^7.20.0",
+    "prettier": "^2.2.1",
+    "typescript": "^4.1.5"
+  }
+}

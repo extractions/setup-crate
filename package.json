@@ -1,6 +1,6 @@
 {
   "name": "setup-crate-action",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "Install any Rust crate",
   "main": "dist/index.js",
   "private": true,

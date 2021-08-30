@@ -1,0 +1,50 @@
+name: build
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+    - run: npm ci
+    - run: npm run lint
+    - run: npm run build
+
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        crate:
+          - { owner: casey, name: just }
+          - { owner: Michael-F-Bryan, name: mdbook-linkcheck }
+          - { owner: rossmacarthur, name: sheldon }
+          - { owner: rust-embedded, name: cross }
+          - { owner: rust-lang, name: mdBook }
+        include:
+          # rossmacarthur/powerpack only ships a macos binary
+          - os: macos-latest
+            crate: { owner: rossmacarthur, name: powerpack }
+        exclude:
+          # rossmacarthur/sheldon does not ship a windows binary
+          - os: windows-latest
+            crate: { owner: rossmacarthur, name: sheldon }
+
+    runs-on: ${{ matrix.os }}
+    name: test (${{matrix.os}}, ${{ matrix.crate.owner }}/${{ matrix.crate.name }})
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup ${{ matrix.crate.owner }}/${{ matrix.crate.name }}
+      uses: ./
+      with:
+        owner: ${{ matrix.crate.owner }}
+        name: ${{ matrix.crate.name }}
+      env:
+        ACTIONS_STEP_DEBUG: true
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Test
+      run: which $(printf ${{ matrix.crate.name }} | tr '[:upper:]' '[:lower:]')
+      shell: bash

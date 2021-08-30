@@ -1,0 +1,16 @@
+name: 'Setup crate'
+author: 'Ross MacArthur'
+description: 'Install any Rust crate'
+branding:
+  icon: 'settings'
+  color: 'red'
+inputs:
+  owner:
+    description: 'The GitHub user or organization'
+  name:
+    description: 'The GitHub repository name'
+  version:
+    description: 'A valid semver specifier of the crate version to install'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

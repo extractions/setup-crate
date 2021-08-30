@@ -1,5 +1,40 @@
 {
-    "workspaces": [
-        "setup-crate"
-    ]
+  "name": "setup-crate-action",
+  "version": "0.2.1",
+  "description": "Install any Rust crate",
+  "main": "dist/index.js",
+  "private": true,
+  "scripts": {
+    "fmt": "prettier --write **/*.ts",
+    "lint": "eslint **/*.ts",
+    "build": "npm run -w setup-crate build && rm -rf dist/ && ncc build src/index.ts --minify",
+    "run": "npm run build && RUNNER_TOOL_CACHE=./runner/cache RUNNER_TEMP=./runner/temp node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/extractions/setup-crate.git"
+  },
+  "author": "Ross MacArthur <ross@macarthur.io>",
+  "license": "MIT OR Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/extractions/setup-crate/issues"
+  },
+  "homepage": "https://github.com/extractions/setup-crate#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@extractions/setup-crate": "^0.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.11.6",
+    "@types/semver": "^7.3.4",
+    "@typescript-eslint/eslint-plugin": "^4.4.0",
+    "@typescript-eslint/parser": "^4.4.0",
+    "@vercel/ncc": "^0.29.2",
+    "eslint": "^7.10.0",
+    "prettier": "^2.1.2",
+    "typescript": "^4.0.3"
+  },
+  "workspaces": [
+    "./setup-crate"
+  ]
 }

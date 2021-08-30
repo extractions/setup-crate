@@ -169,11 +169,20 @@ export async function checkOrInstallTool(tool: Tool): Promise<InstalledTool> {
     }
     core.debug(`Successfully extracted archive for ${name} v${version}`);
 
-    dir = await tc.cacheDir(extractDir, name, version);
-  }
+    // handle the case where there is a single directory extracted
+    const files = await fs.readdir(extractDir);
+    if (files.length == 1) {
+      const maybeDir = path.join(extractDir, files[0]);
+      if ((await fs.lstat(maybeDir)).isDirectory()) {
+        extractDir = maybeDir;
+      }
+    }
 
-  // Handle bad binary permissions, the binary needs to be executable!
-  await handleBadBinaryPermissions(tool, dir);
+    dir = await tc.cacheDir(extractDir, name, version);
+
+    // handle bad binary permissions, the binary needs to be executable!
+    await handleBadBinaryPermissions(tool, dir);
+  }
 
   // FIXME: is there a better way to get the version?
   const version = path.basename(path.dirname(dir));

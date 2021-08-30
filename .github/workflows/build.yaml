@@ -24,6 +24,8 @@ jobs:
           - { owner: rossmacarthur, name: sheldon }
           - { owner: rust-embedded, name: cross }
           - { owner: rust-lang, name: mdBook }
+          - { owner: rustwasm, name: wasm-bindgen }
+          - { owner: sharkdp, name: hyperfine }
         include:
           # rossmacarthur/powerpack only ships a macos binary
           - os: macos-latest

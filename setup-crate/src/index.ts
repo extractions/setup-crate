@@ -92,12 +92,13 @@ async function getRelease(tool: Tool): Promise<Release> {
               };
             }
           })
+          .filter((rel) => Boolean(rel))
           .filter((rel) =>
             rel && versionSpec
               ? semver.satisfies(rel.version, versionSpec)
               : true
           );
-        if (releases) {
+        if (releases.length > 0) {
           done();
         }
         return releases;

@@ -22,7 +22,7 @@
   "homepage": "https://github.com/extractions/setup-crate#readme",
   "dependencies": {
     "@actions/core": "^1.9.1",
-    "@extractions/setup-crate": "^0.2.1"
+    "@extractions/setup-crate": "^0.3.0"
   },
   "devDependencies": {
     "@types/node": "^18.7.21",

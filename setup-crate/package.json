@@ -1,6 +1,6 @@
 {
   "name": "@extractions/setup-crate",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Install a Rust crate.",
   "author": "Ross MacArthur <ross@macarthur.io>",
   "license": "MIT OR Apache-2.0",

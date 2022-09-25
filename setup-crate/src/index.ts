@@ -19,6 +19,13 @@ function getTargets(): string[] {
       return ["x86_64-pc-windows-msvc"];
     }
   }
+  if (arch == "arm64") {
+    if (platform == "linux") {
+      return ["aarch64-unknown-linux-musl", "aarch64-unknown-linux-gnu"];
+    } else if (platform == "darwin") {
+      return ["aarch64-apple-darwin"];
+    }
+  }
   throw new Error(
     `failed to determine any valid targets; arch = ${arch}, platform = ${platform}`
   );

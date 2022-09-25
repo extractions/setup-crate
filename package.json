@@ -21,18 +21,18 @@
   },
   "homepage": "https://github.com/extractions/setup-crate#readme",
   "dependencies": {
-    "@actions/core": "^1.2.6",
+    "@actions/core": "^1.9.1",
     "@extractions/setup-crate": "^0.2.1"
   },
   "devDependencies": {
-    "@types/node": "^14.11.6",
-    "@types/semver": "^7.3.4",
-    "@typescript-eslint/eslint-plugin": "^4.4.0",
-    "@typescript-eslint/parser": "^4.4.0",
-    "@vercel/ncc": "^0.29.2",
-    "eslint": "^7.10.0",
-    "prettier": "^2.1.2",
-    "typescript": "^4.0.3"
+    "@types/node": "^18.7.21",
+    "@types/semver": "^7.3.12",
+    "@typescript-eslint/eslint-plugin": "^5.38.0",
+    "@typescript-eslint/parser": "^5.38.0",
+    "@vercel/ncc": "^0.34.0",
+    "eslint": "^8.24.0",
+    "prettier": "^2.7.1",
+    "typescript": "^4.8.3"
   },
   "workspaces": [
     "./setup-crate"

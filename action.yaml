@@ -12,5 +12,5 @@ inputs:
   version:
     description: 'A valid semver specifier of the crate version to install'
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'

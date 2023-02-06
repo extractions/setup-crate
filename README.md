@@ -1,6 +1,6 @@
 # setup-crate
 
-![build](https://img.shields.io/github/workflow/status/extractions/setup-crate/build)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/extractions/setup-crate/build.yaml?branch=trunk)](https://github.com/extractions/setup-crate/actions/workflows/build.yaml)
 
 This GitHub Action will install a release of a Rust crate for you.
 
@@ -47,26 +47,14 @@ input. For example the following installs the latest `0.10.x` version of
     version: 0.10
 ```
 
-In rare circumstances you might get rate limiting errors, this is because this
-workflow has to make requests to GitHub API in order to list available releases.
-If this happens you can set the `GITHUB_TOKEN` environment variable.
-
-```yaml
-- uses: extractions/setup-crate@v1
-  with:
-    owner: rossmacarthur
-    name: powerpack
-  env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
-
 ### Inputs
 
-| Name      | Required | Description                             | Type   | Default |
-| --------- | -------- | --------------------------------------- | ------ | ------- |
-| `owner`   | yes      | The GitHub user or organization name    | string |         |
-| `name`    | yes      | The GitHub repository name              | string |         |
-| `version` | no       | A valid NPM-style semver specification. | string | *       |
+| Name           | Required | Description                              | Type   | Default                     |
+| -------------- | -------- | ---------------------------------------- | ------ | --------------------------- |
+| `owner`        | yes      | The GitHub user or organization name     | string |                             |
+| `name`         | yes      | The GitHub repository name               | string |                             |
+| `version`      | no       | A valid NPM-style semver specification   | string | *                           |
+| `github-token` | no       | The GitHub token for making API requests | string | ${{ secrets.GITHUB_TOKEN }} |
 
 The semver specification is passed directly to NPM's [semver
 package](https://www.npmjs.com/package/semver). This GitHub Action will install

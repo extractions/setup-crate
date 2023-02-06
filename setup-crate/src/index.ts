@@ -1,5 +1,6 @@
 import * as core from "@actions/core";
 import * as tc from "@actions/tool-cache";
+import * as types from "@octokit/types"
 import { Octokit } from "@octokit/rest";
 import { promises as fs, constants as fs_constants } from "fs";
 import * as path from "path";
@@ -29,6 +30,14 @@ function getTargets(): string[] {
   throw new Error(
     `failed to determine any valid targets; arch = ${arch}, platform = ${platform}`
   );
+}
+
+/**
+ * Options that this package supports.
+ */
+export interface Options {
+  /** Passed to Octokit auth, typically the GITHUB_TOKEN */
+  auth: any;
 }
 
 /**
@@ -78,10 +87,10 @@ interface Release {
  *
  * @returns {Promise<Release>} a single GitHub release.
  */
-async function getRelease(tool: Tool): Promise<Release> {
+async function getRelease(tool: Tool, options?: Options): Promise<Release> {
   const targets = getTargets();
   const { owner, name, versionSpec } = tool;
-  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+  const octokit = new Octokit(options);
   return octokit
     .paginate(
       octokit.repos.listReleases,
@@ -155,7 +164,7 @@ async function handleBadBinaryPermissions(
  *
  * @returns the directory containing the tool binary.
  */
-export async function checkOrInstallTool(tool: Tool): Promise<InstalledTool> {
+export async function checkOrInstallTool(tool: Tool, options?: Options): Promise<InstalledTool> {
   const { name, versionSpec } = tool;
 
   // first check if we have previously downloaded the tool
@@ -163,7 +172,7 @@ export async function checkOrInstallTool(tool: Tool): Promise<InstalledTool> {
 
   if (!dir) {
     // find the latest release by querying GitHub API
-    const { version, downloadUrl } = await getRelease(tool);
+    const { version, downloadUrl } = await getRelease(tool, options);
 
     // download, extract, and cache the tool
     const artifact = await tc.downloadTool(downloadUrl);

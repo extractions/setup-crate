@@ -6,11 +6,18 @@ branding:
   color: 'red'
 inputs:
   owner:
+    required: true
     description: 'The GitHub user or organization'
   name:
+    required: true
     description: 'The GitHub repository name'
   version:
+    required: false
     description: 'A valid semver specifier of the crate version to install'
+  github-token:
+    required: false
+    description: 'The GitHub token used for making API requests'
+    default: ${{ github.token }}
 runs:
   using: 'node16'
   main: 'dist/index.js'

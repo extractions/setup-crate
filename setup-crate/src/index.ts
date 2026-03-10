@@ -28,6 +28,8 @@ function getTargets(): string[] {
       return ["aarch64-unknown-linux-musl", "aarch64-unknown-linux-gnu"];
     } else if (platform == "darwin") {
       return ["aarch64-apple-darwin"];
+    } else if (platform == "win32") {
+      return ["aarch64-pc-windows-msvc"];
     }
   }
   throw new Error(

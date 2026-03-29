@@ -3,11 +3,12 @@
   "version": "1.4.0",
   "description": "Install any Rust crate",
   "main": "dist/index.js",
+  "type": "module",
   "private": true,
   "scripts": {
     "fmt": "prettier --write **/*.ts",
     "lint": "eslint **/*.ts",
-    "build": "npm run -w setup-crate build && rm -rf dist/ && ncc build src/index.ts --minify",
+    "build": "npm run -w setup-crate build && rm -rf dist/ && bun build src/index.ts --target=node --outfile=dist/index.js --minify",
     "run": "npm run build && RUNNER_TOOL_CACHE=./runner/cache RUNNER_TEMP=./runner/temp node dist/index.js"
   },
   "repository": {

@@ -23,10 +23,12 @@
   "publishConfig": {
     "access": "public"
   },
+  "type": "module",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
     "@actions/core": "^3.0.0",
+    "@actions/io": "^3.0.2",
     "@actions/tool-cache": "^4.0.0",
     "@octokit/rest": "^22.0.1",
     "semver": "^7.3.7"

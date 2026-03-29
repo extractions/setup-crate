@@ -2,6 +2,7 @@ import { constants as fs_constants, promises as fs } from "fs";
 import * as path from "path";
 import * as semver from "semver";
 
+import * as io from "@actions/io";
 import * as core from "@actions/core";
 import * as tc from "@actions/tool-cache";
 import { Octokit } from "@octokit/rest";
@@ -186,18 +187,47 @@ export async function checkOrInstallTool(
     let extractDir;
     if (downloadUrl.endsWith(".zip")) {
       extractDir = await tc.extractZip(artifact);
-    } else {
-      extractDir = await tc.extractTar(artifact);
-    }
-    core.debug(`Successfully extracted archive for ${name} v${version}`);
+      core.debug(`Successfully extracted zip archive for ${name} v${version}`);
 
-    // handle the case where there is a single directory extracted
-    const files = await fs.readdir(extractDir);
-    if (files.length == 1) {
-      const maybeDir = path.join(extractDir, files[0]);
-      if ((await fs.lstat(maybeDir)).isDirectory()) {
-        extractDir = maybeDir;
+      // handle the case where there is a single directory extracted
+      const files = await fs.readdir(extractDir);
+      if (files.length == 1) {
+        const maybeDir = path.join(extractDir, files[0]);
+        if ((await fs.lstat(maybeDir)).isDirectory()) {
+          extractDir = maybeDir;
+        }
       }
+    } else if (
+      downloadUrl.endsWith(".tar.gz") ||
+      downloadUrl.endsWith(".tgz") ||
+      downloadUrl.endsWith(".tar.bz2") ||
+      downloadUrl.endsWith(".tar.xz") ||
+      downloadUrl.endsWith(".tar.zst")
+    ) {
+      extractDir = await tc.extractTar(artifact);
+      core.debug(`Successfully extracted tar archive for ${name} v${version}`);
+
+      // handle the case where there is a single directory extracted
+      const files = await fs.readdir(extractDir);
+      if (files.length == 1) {
+        const maybeDir = path.join(extractDir, files[0]);
+        if ((await fs.lstat(maybeDir)).isDirectory()) {
+          extractDir = maybeDir;
+        }
+      }
+    } else {
+      const binName =
+        process.platform === "win32"
+          ? `${tool.bin || name}.exe`
+          : tool.bin || name;
+      const runnerTemp = process.env["RUNNER_TEMP"];
+      if (!runnerTemp) {
+        throw new Error("Expected RUNNER_TEMP to be defined");
+      }
+      extractDir = path.join(runnerTemp, crypto.randomUUID());
+      io.mkdirP(extractDir);
+      io.mv(artifact, path.join(extractDir, binName));
+      core.debug(`Successfully staged binary for ${name} v${version}`);
     }
 
     dir = await tc.cacheDir(extractDir, name, version);

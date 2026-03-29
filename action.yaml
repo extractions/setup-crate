@@ -22,5 +22,5 @@ inputs:
     description: 'The GitHub token used for making API requests'
     default: ${{ github.token }}
 runs:
-  using: 'node20'
+  using: 'node24'
   main: 'dist/index.js'

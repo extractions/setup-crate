@@ -25,9 +25,9 @@ jobs:
         repo:
           - casey/just
           - catppuccin/whiskers
-          # - Michael-F-Bryan/mdbook-linkcheck
+          - Michael-F-Bryan/mdbook-linkcheck
           - rossmacarthur/sheldon
-          # - rust-embedded/cross
+          - rust-embedded/cross
           - rust-lang/mdBook
           - rustwasm/wasm-bindgen
           - sharkdp/hyperfine
@@ -39,6 +39,12 @@ jobs:
           # rossmacarthur/sheldon does not ship a windows binary
           - os: windows-latest
             repo: rossmacarthur/sheldon
+          # macOS aarch64 binaries are not available for mdBook
+          - os: macos-latest
+            repo: Michael-F-Bryan/mdbook-linkcheck
+          # macOS aarch64 binaries are not available for cross
+          - os: macos-latest
+            repo: rust-embedded/cross
 
     runs-on: ${{ matrix.os }}
     name: test (${{matrix.os}}, ${{ matrix.repo }})

@@ -1,13 +1,10 @@
-import {
-  constants as fs_constants,
-  promises as fs,
-} from 'fs';
-import * as path from 'path';
-import * as semver from 'semver';
+import { constants as fs_constants, promises as fs } from "fs";
+import * as path from "path";
+import * as semver from "semver";
 
-import * as core from '@actions/core';
-import * as tc from '@actions/tool-cache';
-import { Octokit } from '@octokit/rest';
+import * as core from "@actions/core";
+import * as tc from "@actions/tool-cache";
+import { Octokit } from "@octokit/rest";
 
 /**
  * @returns {string[]} possible Rust target specifiers for the current platform.

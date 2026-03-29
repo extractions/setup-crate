@@ -26,18 +26,22 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@actions/core": "^1.9.1",
-    "@actions/tool-cache": "^2.0.1",
-    "@octokit/rest": "^21.0.0",
+    "@actions/core": "^3.0.0",
+    "@actions/tool-cache": "^4.0.0",
+    "@octokit/rest": "^22.0.1",
     "semver": "^7.3.7"
   },
   "devDependencies": {
-    "@types/node": "^20.14.10",
-    "@types/semver": "^7.5.8",
-    "@typescript-eslint/eslint-plugin": "^7.16.0",
-    "@typescript-eslint/parser": "^7.16.0",
-    "eslint": "^8.56.0",
-    "prettier": "^3.3.2",
-    "typescript": "^5.5.3"
+    "@eslint/eslintrc": "^3.3.5",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.12.0",
+    "@types/semver": "^7.7.1",
+    "@typescript-eslint/eslint-plugin": "^8.57.2",
+    "@typescript-eslint/parser": "^8.57.2",
+    "@vercel/ncc": "^0.38.4",
+    "eslint": "^10.1.0",
+    "globals": "^17.4.0",
+    "prettier": "^3.8.1",
+    "typescript": "^5.9.3"
   }
 }

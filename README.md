@@ -19,6 +19,7 @@ This action will work for any project that satisfies the following conditions:
   | `x64`   | `win32`       | `x86_64-pc-windows-msvc`                                    |
   | `arm64` | `linux`       | `aarch64-unknown-linux-musl` or `aarch64-unknown-linux-gnu` |
   | `arm64` | `darwin`      | `aarch64-apple-darwin`                                      |
+  | `arm64` | `win32`       | `aarch64-pc-windows-msvc`                                   |
 
 - The asset is a `.tar.gz` or `.zip` archive that contains a binary with the
   project name.

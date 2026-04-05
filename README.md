@@ -33,7 +33,7 @@ project in your workflow. For example the following installs the latest version
 of [mdBook](https://github.com/rust-lang/mdBook).
 
 ```yaml
-- uses: extractions/setup-crate@v1
+- uses: extractions/setup-crate@v2
   with:
     repo: rust-lang/mdBook
 ```
@@ -43,7 +43,7 @@ input. For example the following installs the latest `0.10.x` version of
 [just](https://github.com/casey/just).
 
 ```yaml
-- uses: extractions/setup-crate@v1
+- uses: extractions/setup-crate@v2
   with:
     repo: casey/just@0.10
 ```

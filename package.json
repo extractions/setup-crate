@@ -8,7 +8,7 @@
   "scripts": {
     "fmt": "prettier --write **/*.ts",
     "lint": "eslint **/*.ts",
-    "build": "npm run -w setup-crate build && rm -rf dist/ && bun build src/index.ts --target=node --outfile=dist/index.js --minify",
+    "build": "npm run -w setup-crate build && rm -rf dist/ && ncc build src/index.ts -o dist --minify",
     "run": "npm run build && RUNNER_TOOL_CACHE=./runner/cache RUNNER_TEMP=./runner/temp node dist/index.js"
   },
   "repository": {
